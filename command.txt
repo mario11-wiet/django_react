@@ -6,3 +6,17 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 
 python3 manage.py runserver
+
+django-admin startapp frontend
+npm init -y
+npm i webpack-cli --save-dev
+npm i @babel/core babel-loader @babel/preset-env @babel/preset-react --save-dev
+npm i react react-dom --save-dev
+npm install @material-ui/core
+npm install @babel/plugin-proposal-class-properties
+npm install react-router-dom
+npm install @material-ui/icons
+
+
+python3 manage.py runserver
+npm run dev
