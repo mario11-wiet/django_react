@@ -64,19 +64,19 @@ export default class CreateRoomPage extends Component{
                         Guest Control of Playback State
                         </div>
                     </FormHelperText>
-                    <RadioGroup row defaultValue="true" onChange={this.handleGuestCanPauseChange}>
+                    <RadioGroup row defaultValue="true" onChange={this.handleGuestCanPauseChange} >
                         <FormControlLabel 
                             value="true" 
-                            control={<Radio color="primary"></Radio>}>
+                            control={<Radio color="primary"></Radio>}
                             label="Play/Pause"
-                            labelPlacement="bottom"
+                            labelPlacement="bottom">
 
                         </FormControlLabel>
                         <FormControlLabel 
                             value="false" 
-                            control={<Radio color="secondary"></Radio>}>
+                            control={<Radio color="secondary"></Radio>}
                             label="No Control"
-                            labelPlacement="bottom"
+                            labelPlacement="bottom">
 
                         </FormControlLabel>
                     </RadioGroup>
