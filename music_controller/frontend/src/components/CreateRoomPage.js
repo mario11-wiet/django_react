@@ -10,6 +10,7 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Collapse } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert"
 
 export default class CreateRoomPage extends Component{
     static defaultProps ={
@@ -60,7 +61,7 @@ export default class CreateRoomPage extends Component{
 
     handleUpdateButtonPresses() {
         const requestOptions = {
-            method: 'PATCH',
+            method: "PATCH",
             headers: {'Content-Type' : 'application/json'},
             body: JSON.stringify({
                 votes_to_skip:this.state.votesToSkip,
@@ -114,7 +115,25 @@ export default class CreateRoomPage extends Component{
         <Grid container spacing={1}>
             <Grid item xs={12} align="center">
                 <Collapse in={this.state.errorMessage != "" || this.state.sucessMessage !=""}>
-                    {this.state.sucessMessage}
+                {this.state.successMsg != "" ? (
+                    <Alert
+                        severity="success"
+                        onClose={() => {
+                        this.setState({ sucessMessage: "" });
+                        }}
+                    >
+                        {this.state.sucessMessage}
+                    </Alert>
+                    ) : (
+                    <Alert
+                        severity="error"
+                        onClose={() => {
+                        this.setState({ errorMessage: "" });
+                        }}
+                    >
+                        {this.state.errorMessage}
+                    </Alert>
+                    )}
                 </Collapse>
             </Grid>
             <Grid item xs={12} align="center">
@@ -129,7 +148,7 @@ export default class CreateRoomPage extends Component{
                         Guest Control of Playback State
                         </div>
                     </FormHelperText>
-                    <RadioGroup row defaultValue="true" onChange={this.handleGuestCanPauseChange} >
+                    <RadioGroup row defaultValue={this.props.guestCanPause.toString()} onChange={this.handleGuestCanPauseChange} >
                         <FormControlLabel 
                             value="true" 
                             control={<Radio color="primary"></Radio>}

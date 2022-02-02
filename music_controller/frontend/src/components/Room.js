@@ -11,14 +11,17 @@ export default class Room extends Component {
             votesToSkip:2,
             guestCanPause: false,
             isHost: false,
-            showSettings: false
+            showSettings: false,
+            spotifyAuthenticated: false,
         }
         this.updateShowSettings= this.updateShowSettings.bind(this);
         this.roomCode = this.props.match.params.roomCode;
-        this.getRoomDatails();
+        this.getRoomDatails = this.getRoomDatails.bind(this);
         this.leaveButtonPressed= this.leaveButtonPressed.bind(this);
         this.renterSettings = this.renterSettings.bind(this);
         this.renderSettingsButton = this.renderSettingsButton.bind(this);
+        this.authenticateSpotify = this.authenticateSpotify.bind(this);
+        this.getRoomDatails();
     }
 
     updateShowSettings(value) {
@@ -45,8 +48,8 @@ export default class Room extends Component {
                     update={true} 
                     votesToSkip={this.state.votesToSkip} 
                     guestCanPause={this.state.guestCanPause} 
-                    roomCode={this.state.roomCode} 
-                    updateCallback={() => {}}></CreateRoomPage>
+                    roomCode={this.roomCode} 
+                    updateCallback={this.getRoomDatails}></CreateRoomPage>
                 </Grid>
                 <Grid item xs={12} align="center">
                     <Button color="secondary" variant="contained" onClick={() => this.updateShowSettings(false)}>Close</Button>
@@ -63,15 +66,34 @@ export default class Room extends Component {
                 this.props.history.push("/")
             }
             return response.json()
-        }).then((data) => this.setState(
+        }).then((data) => {this.setState(
             {
                 votesToSkip:data.votes_to_skip,
                 guestCanPause: data.guest_can_pause,
                 isHost: data.is_host,
+            });
+            if (this.state.isHost){
+                this.authenticateSpotify();
             }
-        )
-        )
+        })
+
     }
+
+    authenticateSpotify() {
+        fetch("/spotify/is-authenticated")
+          .then((response) => response.json())
+          .then((data) => {
+            this.setState({ spotifyAuthenticated: data.status });
+            console.log(data.status);
+            if (!data.status) {
+              fetch("/spotify/get-auth-url")
+                .then((response) => response.json())
+                .then((data) => {
+                  window.location.replace(data.url);
+                });
+            }
+          });
+      }
 
     leaveButtonPressed() {
         const requestOptions={
